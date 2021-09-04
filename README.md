@@ -1,6 +1,8 @@
 # Control dron camera by gaze tracking
 Install Python 3.6.12 and requirements.txt modules
 
+Download Dlib model from http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2
+
 From the console
 
 ```sh
