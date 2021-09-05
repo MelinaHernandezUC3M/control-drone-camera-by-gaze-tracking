@@ -108,6 +108,7 @@ def test_message(webcam_image):
     global list_of_horizontal_ratios
     global software_data
     global gaze_position
+
     socketio.sleep(0.01)
     encoded_image = webcam_image.split(",")[1]
     nparr = np.fromstring(base64.b64decode(encoded_image), np.uint8)
@@ -117,7 +118,6 @@ def test_message(webcam_image):
 
     # We send this frame to GazeTracking to analyze it
     gaze.refresh(frame)
-    frame = gaze.annotated_frame()
 
     text = ""
     if gaze.is_right():
@@ -171,24 +171,9 @@ def test_message(webcam_image):
                           'Servo vertical movement': vertical_movement,
                           'Gaze Horizontal Ratio': gaze.horizontal_ratio(),
                           'Servo horizontal movement': horizontal_movement})
-    '''
-    if len(list_of_horizontal_ratios) >= 20:
-        print({'time': time.time() - initial_time, 'Gaze Vertical Ratio': gaze.vertical_ratio(),
-                              'Servo vertical movement': vertical_movement,
-                              'Gaze Horizontal Ratio': gaze.horizontal_ratio(),
-                              'Servo horizontal movement': horizontal_movement})
-    '''
-    cv.putText(frame, text, (90, 60), cv.FONT_HERSHEY_DUPLEX, 1.6, (147, 58, 31), 2)
-
-    cv.putText(frame, "Horizontal Ratio:  " + str(gaze.horizontal_ratio()), (90, 130), cv.FONT_HERSHEY_DUPLEX, 0.9, (147, 58, 31), 1)
-    cv.putText(frame, "Vertical Ratio: " + str(gaze.vertical_ratio()), (90, 165), cv.FONT_HERSHEY_DUPLEX, 0.9, (147, 58, 31), 1)
-
-    cv.imshow("Demo", frame)
-    cv.waitKey(0)
 
     gaze_position = message
     emit('gaze_position', {'data': message, 'count': 0})
-
 
 
 @socketio.on('gaze_position_result')
